@@ -1,4 +1,4 @@
-package com.bramerlabs.engine.io;
+package com.bramerlabs.engine.io.window;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package com.bramerlabs.engine.io;
+package com.bramerlabs.engine.io.window;
 
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL46;

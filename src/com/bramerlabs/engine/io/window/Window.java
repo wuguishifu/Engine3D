@@ -1,4 +1,4 @@
-package com.bramerlabs.engine.io;
+package com.bramerlabs.engine.io.window;
 
 import com.bramerlabs.engine.math.matrix.Matrix4f;
 import org.lwjgl.glfw.GLFW;
