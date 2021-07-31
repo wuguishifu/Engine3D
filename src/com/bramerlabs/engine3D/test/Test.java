@@ -9,7 +9,7 @@ import com.bramerlabs.engine3D.graphics.io.window.WindowConstants;
 import com.bramerlabs.engine3D.graphics.renderers.Renderer;
 import com.bramerlabs.engine3D.math.vector.Vector3f;
 import com.bramerlabs.engine3D.math.vector.Vector4f;
-import com.bramerlabs.engine3D.objects.Cube;
+import com.bramerlabs.engine3D.objects.IcoSphere;
 import org.lwjgl.opengl.GL46;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class Test implements Runnable {
     private Shader shader;
     private Renderer renderer;
 
-    private Cube cube;
+    private IcoSphere sphere;
 
     public static void main(String[] args) {
         new Test().start();
@@ -53,7 +53,7 @@ public class Test implements Runnable {
         window.create();
         camera.setFocus(new Vector3f(0, 0, 0));
 
-        shader = new Shader("shaders/textured/vertex.glsl", "shaders/textured/fragment.glsl");
+        shader = new Shader("shaders/colored/vertex.glsl", "shaders/colored/fragment.glsl");
         shader.create();
 
         renderer = new Renderer(window, new Vector3f(5, 20, 10));
@@ -62,9 +62,8 @@ public class Test implements Runnable {
                 "textures/wall/specular.png",
                 "textures/wall/normal.png");
         wall.create();
-        cube = new Cube(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0),
-                new Vector3f(1, 1, 1), wall);
-        cube.createMesh();
+        sphere = new IcoSphere(new Vector3f(0, 0, 0), new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
+        sphere.createMesh();
 
     }
 
@@ -76,14 +75,14 @@ public class Test implements Runnable {
     }
 
     private void render() {
-        renderer.renderMesh(cube, camera, shader);
+        renderer.renderMesh(sphere, camera, shader);
         window.swapBuffers();
     }
 
     private void close() {
         window.destroy();
         shader.destroy();
-        cube.destroy();
+        sphere.destroy();
     }
 
 }

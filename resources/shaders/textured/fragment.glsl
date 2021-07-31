@@ -12,6 +12,7 @@ in mat3 TBN;
 uniform vec3 lightPos;
 uniform vec3 lightColor;
 uniform float lightLevel;
+uniform float reflectiveness;
 
 // the position of the camera
 uniform vec3 viewPos;
@@ -49,7 +50,7 @@ void main() {
     float specularStrength = 1;
     vec3 viewDir = normalize(viewPos - passFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), reflectiveness);
     vec3 specular = specularStrength * spec * vec3(texture(specularMap, passTextureCoord));
 
     // combine the ambient, diffusion, and specular lighting into the final fragment color

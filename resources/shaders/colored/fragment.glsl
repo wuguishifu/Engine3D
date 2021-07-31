@@ -13,7 +13,7 @@ uniform float lightLevel;
 // the position of the camera
 uniform vec3 viewPos;
 
-uniform int reflectiveness;
+uniform float reflectiveness;
 
 // the output color
 out vec4 outColor;

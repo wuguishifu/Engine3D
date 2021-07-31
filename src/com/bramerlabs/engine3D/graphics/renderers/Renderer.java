@@ -18,6 +18,7 @@ public class Renderer {
 
     private final Window window;
     private Vector3f lightPos, lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
+    private float lightLevel = 0.2f, reflectiveness = 32.0f;
 
     public Renderer(Window window, Vector3f lightPos) {
         this.window = window;
@@ -40,12 +41,28 @@ public class Renderer {
         this.lightColor = lightColor;
     }
 
+    public void setLightLevel(float lightLevel) {
+        this.lightLevel = lightLevel;
+    }
+
+    public void setReflectiveness(float reflectiveness) {
+        this.reflectiveness = reflectiveness;
+    }
+
     public Vector3f getLightPos() {
         return this.lightPos;
     }
 
     public Vector3f getLightColor() {
         return this.lightColor;
+    }
+
+    public float getLightLevel() {
+        return lightLevel;
+    }
+
+    public float getReflectiveness() {
+        return reflectiveness;
     }
 
     private void renderColoredMesh(RenderObject object, Camera camera, Shader shader) {
@@ -59,10 +76,10 @@ public class Renderer {
         shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
         shader.setUniform("vProjection", window.getProjectionMatrix());
         shader.setUniform("lightPos", lightPos);
-        shader.setUniform("lightLevel", 0.3f);
+        shader.setUniform("lightLevel", lightLevel);
         shader.setUniform("viewPos", camera.getPosition());
         shader.setUniform("lightColor", lightColor);
-        shader.setUniform("reflectiveness", 32); // the value of the specular reflectiveness
+        shader.setUniform("reflectiveness", reflectiveness); // the value of the specular reflectiveness
         GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
         shader.unbind();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -94,9 +111,10 @@ public class Renderer {
         shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
         shader.setUniform("vProjection", window.getProjectionMatrix());
         shader.setUniform("lightPos", lightPos);
-        shader.setUniform("lightLevel", 0.3f);
+        shader.setUniform("lightLevel", lightLevel);
         shader.setUniform("viewPos", camera.getPosition());
         shader.setUniform("lightColor", lightColor);
+        shader.setUniform("reflectiveness", reflectiveness); // the value of the specular reflectiveness
         GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
         shader.unbind();
 
