@@ -9,6 +9,7 @@ import com.bramerlabs.engine3D.graphics.io.window.WindowConstants;
 import com.bramerlabs.engine3D.graphics.renderers.Renderer;
 import com.bramerlabs.engine3D.math.vector.Vector3f;
 import com.bramerlabs.engine3D.math.vector.Vector4f;
+import com.bramerlabs.engine3D.objects.Cube;
 import com.bramerlabs.engine3D.objects.IcoSphere;
 import org.lwjgl.opengl.GL46;
 
@@ -24,6 +25,7 @@ public class Test implements Runnable {
     private Renderer renderer;
 
     private IcoSphere sphere;
+    private Cube cube;
 
     public static void main(String[] args) {
         new Test().start();
@@ -62,8 +64,11 @@ public class Test implements Runnable {
                 "textures/wall/specular.png",
                 "textures/wall/normal.png");
         wall.create();
-        sphere = new IcoSphere(new Vector3f(0, 0, 0), new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
+        sphere = new IcoSphere(new Vector3f(-1, 0, 0), new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
         sphere.createMesh();
+
+        cube = new Cube(new Vector3f(1, 0, 0), new Vector3f(0), new Vector3f(1), new Vector4f(0.5f, 0.0f, 0.5f, 1.0f));
+        cube.createMesh();
 
     }
 
@@ -76,6 +81,7 @@ public class Test implements Runnable {
 
     private void render() {
         renderer.renderMesh(sphere, camera, shader);
+        renderer.renderMesh(cube, camera, shader);
         window.swapBuffers();
     }
 
