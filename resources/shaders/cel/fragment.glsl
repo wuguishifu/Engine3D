@@ -20,39 +20,33 @@ out vec4 outColor;
 
 void main() {
 
-    vec3 color = vec3(passColor.xyz);
-    float alpha = passColor.w;
-
-    vec3 normal = passNormal;
-
-    // ambient lighting
-    vec3 ambientLight = lightLevel * lightColor; // create the ambient light level
-
-    // diffusion light
     vec3 lightDir = normalize(lightPos - passFragPos); // find the direction of the light
-    float diff = max(dot(normal, lightDir), 0.0);
-    vec3 diffuseLight = diff * lightColor;
+    float intensity = dot(lightDir, passNormal);
 
-    // specular light
-    float specularStrength = 1;
-    vec3 viewDir = normalize(viewPos - passFragPos);
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), reflectiveness);
-    vec3 specular = specularStrength * spec * lightColor;
+    vec3 colorComp = passColor.xyz;
+    colorComp = vec3(1.0, 1.0, 1.0);
 
-    // combine the ambient and diffusion light into the final fragment color
-    vec3 colorResult = (ambientLight + diffuseLight + specular) * color; // combine the light components
+    vec4 color;
 
-    float luminance = 0.2126 * colorResult.x + 0.7152 * colorResult.y + 0.0722 * colorResult.z;
-    if (luminance <= 0.25) {
-        luminance = 0.25;
-    } else if (luminance <= 0.5) {
-        luminance = 0.5;
-    } else if (luminance <= 0.75) {
-        luminance = 0.75;
+    if (intensity >  0.95) {
+        color = vec4(0.95 * colorComp, 1.0);
+    } else if (intensity > 0.80) {
+        color = vec4(0.80 * colorComp, 1.0);
+    } else if (intensity > 0.70) {
+        color = vec4(0.70 * colorComp, 1.0);
+    } else if (intensity > 0.60) {
+        color = vec4(0.60 * colorComp, 1.0);
+    } else if (intensity > 0.50) {
+        color = vec4(0.50 * colorComp, 1.0);
+    } else if (intensity > 0.40) {
+        color = vec4(0.40 * colorComp, 1.0);
+    } else if (intensity > 0.30) {
+        color = vec4(0.30 * colorComp, 1.0);
+    } else if (intensity > 0.20) {
+        color = vec4(0.20 * colorComp, 1.0);
     } else {
-        luminance = 1.0;
+        color = vec4(0.15 * colorComp, 1.0);
     }
 
-    outColor = vec4(luminance * color, alpha);
+    outColor = color;
 }

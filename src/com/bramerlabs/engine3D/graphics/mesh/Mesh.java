@@ -52,6 +52,12 @@ public abstract class Mesh {
         pbo = storeData(positionBuffer, POSITION, 3);
     }
 
+    protected void makePositionBuffer(float[] positionData) {
+        FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
+        positionBuffer.put(positionData).flip();
+        pbo = storeData(positionBuffer, POSITION, 3);
+    }
+
     protected void makeNormalBuffer() {
         FloatBuffer normalBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
         float[] normalData = new float[vertices.length * 3];
@@ -62,6 +68,12 @@ public abstract class Mesh {
         }
         normalBuffer.put(normalData).flip();
         nbo = storeData(normalBuffer, NORMAL, 3);
+    }
+
+    protected void makeNormalBuffer(float[] normalData) {
+        FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
+        positionBuffer.put(normalData).flip();
+        pbo = storeData(positionBuffer, POSITION, 3);
     }
 
     protected static int storeData(FloatBuffer buffer, int index, int size) {
