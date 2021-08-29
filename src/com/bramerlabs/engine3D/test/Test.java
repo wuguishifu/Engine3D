@@ -7,15 +7,14 @@ import com.bramerlabs.engine3D.graphics.io.window.Input;
 import com.bramerlabs.engine3D.graphics.io.window.Window;
 import com.bramerlabs.engine3D.graphics.io.window.WindowConstants;
 import com.bramerlabs.engine3D.graphics.renderers.Renderer;
+import com.bramerlabs.engine3D.math.matrix.Matrix4f;
 import com.bramerlabs.engine3D.math.vector.Vector3f;
-import com.bramerlabs.engine3D.math.vector.Vector4f;
-import com.bramerlabs.engine3D.objects.Cube;
-import com.bramerlabs.engine3D.objects.IcoSphere;
 import com.bramerlabs.engine3D.objects.ObjectLoader;
 import com.bramerlabs.engine3D.objects.RenderObject;
 import org.lwjgl.opengl.GL46;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Test implements Runnable {
 
@@ -26,10 +25,9 @@ public class Test implements Runnable {
     private Shader shader;
     private Renderer renderer;
 
-    private IcoSphere sphere;
-    private Cube cube;
-
     private RenderObject object;
+
+    ArrayList<Matrix4f> models = new ArrayList<>();
 
     public static void main(String[] args) {
         new Test().start();
@@ -59,27 +57,30 @@ public class Test implements Runnable {
         window.create();
         camera.setFocus(new Vector3f(0, 0, 0));
 
-        shader = new Shader("shaders/cel/vertex.glsl", "shaders/cel/fragment.glsl");
 //        shader = new Shader("shaders/cel/vertex.glsl", "shaders/cel/fragment.glsl");
+        shader = new Shader("shaders/textured/vertex.glsl", "shaders/textured/fragment.glsl");
         shader.create();
 
         renderer = new Renderer(window, new Vector3f(-5, 20, 10));
 
-        Material wall = new Material("textures/wall/base.png",
-                "textures/wall/specular.png",
-                "textures/wall/normal.png");
-        wall.create();
-        sphere = new IcoSphere(new Vector3f(-1, 0, 0), new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
-        sphere.createMesh();
+        Material birch = new Material(
+                "textures/birch/base.png",
+                "textures/birch/specular.png",
+                "textures/birch/normal.png");
+        birch.create();
 
-        cube = new Cube(new Vector3f(1, 0, 0), new Vector3f(0), new Vector3f(1), new Vector4f(0.5f, 0.0f, 0.5f, 1.0f));
-        cube.createMesh();
-
-        object = ObjectLoader.parse("resources/objects/dino.obj");
-        object.setScale(new Vector3f(10, 10, 10));
-        object.setPosition(new Vector3f(0, -2, 0));
+        object = ObjectLoader.parseTexture("resources/objects/birch.obj", birch);
+        object.setScale(new Vector3f(1, 1, 1));
         object.createMesh();
 
+        for (int i = -5; i < 5; i++) {
+            for (int j = -5; j < 5; j++) {
+                Vector3f position = new Vector3f((float) (i + Math.random()), -2, (float) (j + Math.random()));
+                Vector3f scale = new Vector3f(10, 10, 10);
+                Vector3f rotation = new Vector3f(0, (float) (360 * Math.random()), 0);
+                models.add(Matrix4f.transform(position, rotation, scale));
+            }
+        }
     }
 
     private void update() {
@@ -90,16 +91,16 @@ public class Test implements Runnable {
     }
 
     private void render() {
-//        renderer.renderMesh(sphere, camera, shader);
-//        renderer.renderMesh(cube, camera, shader);
-        renderer.renderMesh(object, camera, shader);
+        for (Matrix4f model : models) {
+            renderer.renderInstancedTexturedMesh(object, camera, shader, model);
+        }
         window.swapBuffers();
     }
 
     private void close() {
         window.destroy();
         shader.destroy();
-        sphere.destroy();
+        object.destroy();
     }
 
 }
