@@ -73,8 +73,9 @@ public class Test implements Runnable {
         object.setScale(new Vector3f(1, 1, 1));
         object.createMesh();
 
-        for (int i = -5; i < 5; i++) {
-            for (int j = -5; j < 5; j++) {
+        int radius = 10;
+        for (int i = -radius; i <= radius; i++) {
+            for (int j = -radius; j <= radius; j++) {
                 Vector3f position = new Vector3f((float) (i + Math.random()), -2, (float) (j + Math.random()));
                 Vector3f scale = new Vector3f(10, 10, 10);
                 Vector3f rotation = new Vector3f(0, (float) (360 * Math.random()), 0);
